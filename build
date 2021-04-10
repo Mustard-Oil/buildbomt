@@ -1,16 +1,20 @@
 #!/bin/bash
 cd /tmp/rom # Depends on where source got synced
-rm -rf .repo & # lets remove unnecessary things, so that no storage issue can occur
-
+rm -rf .repo # lets remove unnecessary things, so that no storage issue can occur
 # Normal build steps
-source build/envsetup.sh 
+bash build/envsetup.sh
 lunch kangos_X01AD-userdebug  ##edit this
+export SKIP_API_CHECKS=true
+export SKIP_ABI_CHECKS=true
+cd /tmp/rom
 export CCACHE_DIR=/tmp/ccache ##set additional flags if you need(optional)
 export CCACHE_EXEC=$(which ccache)
 export USE_CCACHE=1
-ccache -M 20G
+
+ccache -M 30G
 ccache -o compression=true
 ccache -z
+ccache -c
 
 up(){
 	curl --upload-file $1 https://transfer.sh/
